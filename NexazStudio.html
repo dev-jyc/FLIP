@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXAZ Studio - 기적이 시작되는 곳</title>
+<meta name="description" content="NEXAZ는 게임 스튜디오입니다. 우리의 게임 FLIP의 캐릭터를 만나보세요.">
+
+<!-- Fonts: Pretendard (main) / Unbounded (display) / JetBrains Mono (labels) -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* Layout concept: black stage with a blue spotlight. The hero is a playable floor where the two FLIP characters walk; light "paper" section carries the black NEXAZ logo. */
+:root {
+  --ink: #05070d;
+  --ink-2: #0a0f1e;
+  --ink-3: #111a36;
+  --blue: #2d6bff;
+  --blue-hi: #6c97ff;
+  --paper: #eaf0ff;
+  --red: #ff4d57;
+  --line: rgba(255, 255, 255, .12);
+  --text: #f2f5ff;
+  --muted: #98a3c4;
+
+  --f-main: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  --f-display: "Unbounded", "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  --maxw: 1160px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--f-main);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue-hi); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--maxw) + 2 * 20px);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--blue-hi);
+}
+
+.crop { position: relative; display: block; overflow: hidden; aspect-ratio: var(--bw) / var(--bh); }
+.crop img { position: absolute; max-width: none; height: auto; width: calc(var(--iw) / var(--bw) * 100%); left: calc(var(--bx) / var(--bw) * -100%); top: calc(var(--by) / var(--bh) * -100%); }
+
+.langbar { background: var(--ink); border-bottom: 1px solid var(--line); }
+.langbar .wrap { display: flex; justify-content: flex-end; gap: 4px; padding-block: 4px; }
+.langbar button { min-height: 36px; min-width: 48px; padding: 0 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--muted); font: 500 12px var(--f-mono); letter-spacing: .06em; cursor: pointer; }
+.langbar button:hover { color: var(--text); }
+.langbar button[aria-pressed="true"] { border-color: var(--blue-hi); color: var(--text); }
+
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(5, 7, 13, .78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.nav .crop { height: 24px; }
+.nav ul { display: flex; gap: clamp(16px, 4vw, 36px); list-style: none; margin: 0; padding: 0; }
+.nav ul a { font-size: 15px; font-weight: 500; color: var(--muted); transition: color .2s; }
+.nav ul a:hover { color: var(--text); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(56px, 9vw, 112px) clamp(56px, 8vw, 96px);
+  background:
+    radial-gradient(900px 520px at 78% 105%, rgba(45, 107, 255, .42), transparent 62%),
+    radial-gradient(600px 400px at 10% -10%, rgba(45, 107, 255, .16), transparent 60%),
+    var(--ink);
+}
+.hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.hero h1 {
+  margin: 18px 0 20px;
+  font-size: clamp(38px, 6.2vw, 76px);
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.hero h1 em { font-style: normal; color: var(--blue); }
+.hero p.lead { margin: 0 0 32px; max-width: 30em; color: var(--muted); font-size: clamp(16px, 1.6vw, 19px); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 50px; padding: 0 26px;
+  border-radius: 999px;
+  font-weight: 700; font-size: 16px;
+  border: 1px solid transparent;
+  transition: transform .15s, background .2s, border-color .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: var(--blue-hi); }
+.btn-ghost { border-color: var(--line); color: var(--text); }
+.btn-ghost:hover { border-color: var(--blue-hi); }
+
+/* Stage */
+.stage-box { min-width: 0; }
+.stage {
+  position: relative;
+  height: clamp(220px, 34vw, 320px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 40px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 40px 100%,
+    linear-gradient(180deg, rgba(10, 15, 30, .85), rgba(17, 26, 54, .9));
+  background-blend-mode: normal;
+  overflow: hidden;
+}
+.stage::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 70% at 50% 100%, rgba(45, 107, 255, .35), transparent 70%);
+  pointer-events: none;
+}
+.stage .floor {
+  position: absolute; left: 0; right: 0; bottom: 34px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue-hi), transparent);
+}
+.stage .hero-char {
+  position: absolute; bottom: 34px;
+  width: calc(clamp(72px, 11vw, 112px) * var(--sw, 1)); height: auto;
+  transform: translateX(-50%);
+  user-select: none; -webkit-user-drag: none;
+}
+.stage .tag {
+  position: absolute; top: 14px; left: 16px;
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.pad { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 14px; }
+.pad-group {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: var(--ink-2);
+}
+.pad-group .who { font-weight: 700; font-size: 14px; }
+.pad-group .who small { display: block; font-family: var(--f-mono); font-weight: 400; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+.pad-group.blue .who { color: var(--blue-hi); }
+.pad-group.red .who { color: var(--red); }
+.pad-keys { display: flex; gap: 8px; }
+.key {
+  width: 48px; height: 48px;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--ink-3);
+  color: var(--text);
+  font: 600 20px var(--f-main);
+  cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.key:active, .key.on { background: var(--blue); border-color: var(--blue); }
+.pad-group.red .key:active, .pad-group.red .key.on { background: var(--red); border-color: var(--red); }
+.hint { margin: 12px 2px 0; font-size: 13px; color: var(--muted); }
+
+/* ---------- Section frame ---------- */
+section { padding-block: clamp(64px, 9vw, 120px); }
+.sec-head { max-width: 640px; margin-bottom: clamp(32px, 5vw, 56px); }
+.sec-head h2 {
+  margin: 14px 0 14px;
+  font-size: clamp(30px, 4.4vw, 52px);
+  line-height: 1.15; font-weight: 800; letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.sec-head p { margin: 0; color: var(--muted); }
+
+/* ---------- FLIP ---------- */
+#flip { background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%); border-top: 1px solid var(--line); }
+.flip-top { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; margin-bottom: clamp(48px, 7vw, 88px); }
+.logo-panel {
+  min-width: 0;
+  display: grid; place-items: center;
+  padding: clamp(32px, 6vw, 72px);
+  min-height: 260px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(70% 90% at 50% 0%, rgba(45, 107, 255, .5), transparent 70%),
+    linear-gradient(160deg, #0d1635, #060a18);
+}
+.logo-panel img { width: min(100%, 420px); height: auto; }
+.flip-top h2 { margin: 12px 0 16px; font-family: var(--f-display); font-weight: 800; font-size: clamp(40px, 6vw, 76px); line-height: 1; letter-spacing: -.02em; }
+.flip-top p { margin: 0 0 14px; color: var(--muted); max-width: 30em; }
+
+.chars { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.char-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--ink-3);
+  overflow: hidden;
+}
+.char-view {
+  position: relative;
+  display: grid; place-items: end center;
+  height: clamp(220px, 28vw, 300px);
+  padding-bottom: 34px;
+  background:
+    radial-gradient(70% 80% at 50% 100%, var(--glow), transparent 70%),
+    linear-gradient(180deg, #0a1128, #0e1736);
+}
+.char-view::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: 34px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+.char-view img { position: relative; z-index: 1; width: calc(clamp(110px, 16vw, 168px) * var(--sw, 1)); height: auto; user-select: none; -webkit-user-drag: none; }
+.char-card.blue { --accent: var(--blue-hi); --glow: rgba(45, 107, 255, .45); }
+.char-card.red { --accent: var(--red); --glow: rgba(255, 77, 87, .32); }
+.char-info { padding: 22px 22px 24px; }
+.char-info .label { font-family: var(--f-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.char-info h3 { margin: 6px 0 16px; font-size: 26px; letter-spacing: -.02em; font-weight: 800; }
+.states { display: flex; gap: 8px; flex-wrap: wrap; }
+.state {
+  min-height: 44px; padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent; color: var(--muted);
+  font: 600 14px var(--f-main);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.state:hover { color: var(--text); border-color: var(--accent); }
+.state[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #05070d; }
+
+/* ---------- About / Team (light) ---------- */
+#about { background: var(--paper); color: #0a1025; }
+#about .eyebrow { color: var(--blue); }
+.about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+.about-logo { height: 34px; margin-bottom: 28px; }
+#about h2 { margin: 0 0 18px; font-size: clamp(30px, 4.4vw, 52px); line-height: 1.15; font-weight: 800; letter-spacing: -.03em; text-wrap: balance; }
+#about p { margin: 0 0 14px; max-width: 32em; color: #3a4568; }
+.person {
+  display: flex; align-items: center; gap: 22px;
+  padding: 22px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 24px 60px -30px rgba(20, 50, 140, .35);
+}
+.person img { width: clamp(110px, 16vw, 168px); aspect-ratio: 1; object-fit: cover; border-radius: 18px; flex: none; object-position: 50% 0; background: #fff; }
+.person .label { font-family: var(--f-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--blue); }
+.person h3 { margin: 6px 0 4px; font-size: 28px; letter-spacing: -.02em; font-weight: 800; }
+.person p { margin: 0; color: #5a6485; font-size: 15px; }
+
+/* ---------- Footer ---------- */
+footer { background: var(--ink); border-top: 1px solid var(--line); padding-block: 44px calc(44px + env(safe-area-inset-bottom, 0px)); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; }
+footer .crop { height: 24px; }
+footer small { font-family: var(--f-mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .hero-grid, .flip-top, .about-grid { grid-template-columns: 1fr; }
+  .chars { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .nav ul { gap: 14px; }
+  .pad { grid-template-columns: 1fr; }
+  .person { flex-direction: column; align-items: flex-start; }
+  .person img { width: 100%; max-width: 220px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="langbar"><div class="wrap" role="group" aria-label="Language"><button type="button" data-lang="ko" aria-pressed="true">한국어</button><button type="button" data-lang="en" aria-pressed="false">English</button><button type="button" data-lang="ja" aria-pressed="false">日本語</button></div></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#top" aria-label="NEXAZ 홈">
+      <span class="crop" style="--iw:1200;--bx:146;--by:204;--bw:908;--bh:182"><img referrerpolicy="no-referrer" src="https://i.postimg.cc/BnssXTfR/nexaz-transparent.png" alt="NEXAZ"></span>
+    </a>
+    <nav aria-label="주요 메뉴">
+      <ul>
+        <li><a href="#flip">FLIP</a></li>
+        <li><a href="#characters">캐릭터</a></li>
+        <li><a href="#about">스튜디오</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">NEXAZ Game Studio</span>
+        <h1>재미를 한 번,<br><em>뒤집어</em> 봅니다.</h1>
+        <p class="lead">NEXAZ는 게임 스튜디오입니다. 우리의 게임 FLIP에 등장하는 캐릭터를 지금 바로 움직여 보세요.</p>
+        <div class="btns">
+          <a class="btn btn-primary" href="#flip">FLIP 만나보기</a>
+          <a class="btn btn-ghost" href="#about">스튜디오 소개</a>
+        </div>
+      </div>
+
+      <div class="stage-box">
+        <div class="stage" id="stage" aria-label="캐릭터 체험 무대">
+          <span class="tag">Play stage</span>
+          <div class="floor"></div>
+          <img referrerpolicy="no-referrer" class="hero-char" id="heroBlue" alt="파랑 캐릭터" src="https://i.postimg.cc/zftdYrk6/1-Stand-blue.gif" style="left:32%">
+          <img referrerpolicy="no-referrer" class="hero-char" id="heroRed" alt="빨강 캐릭터" src="https://i.postimg.cc/d1h5qxWS/7-Stand-Red.gif" style="left:68%">
+        </div>
+        <div class="pad">
+          <div class="pad-group blue">
+            <div class="who">파랑<small>A W D</small></div>
+            <div class="pad-keys">
+              <button class="key" type="button" data-char="blue" data-dir="left" aria-label="파랑 왼쪽으로 이동">←</button>
+              <button class="key" type="button" data-char="blue" data-dir="jump" aria-label="파랑 점프">↑</button>
+              <button class="key" type="button" data-char="blue" data-dir="right" aria-label="파랑 오른쪽으로 이동">→</button>
+            </div>
+          </div>
+          <div class="pad-group red">
+            <div class="who">빨강<small>← ↑ →</small></div>
+            <div class="pad-keys">
+              <button class="key" type="button" data-char="red" data-dir="left" aria-label="빨강 왼쪽으로 이동">←</button>
+              <button class="key" type="button" data-char="red" data-dir="jump" aria-label="빨강 점프">↑</button>
+              <button class="key" type="button" data-char="red" data-dir="right" aria-label="빨강 오른쪽으로 이동">→</button>
+            </div>
+          </div>
+        </div>
+        <p class="hint">파랑은 A / W / D 키, 빨강은 방향키(← ↑ →)로 움직이고 점프해 보세요. 화면 버튼으로도 조작할 수 있고, 서로 밀거나 점프로 넘어가거나 머리 위에 올라설 수도 있어요.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLIP -->
+  <section id="flip">
+    <div class="wrap">
+      <div class="flip-top">
+        <div class="logo-panel">
+          <img referrerpolicy="no-referrer" src="https://i.postimg.cc/ydDLVbQs/13-Flip-Logo-transparent.png" alt="FLIP 로고">
+        </div>
+        <div>
+          <span class="eyebrow">Our Game</span>
+          <h2>FLIP</h2>
+          <p>파랑과 빨강, 두 캐릭터가 함께하는 NEXAZ의 게임입니다.</p>
+          <p>아래에서 각 캐릭터가 서 있을 때, 좌우로 움직일 때, 점프할 때의 모습을 확인할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div id="characters">
+        <div class="sec-head">
+          <span class="eyebrow">Characters</span>
+          <h2>FLIP의 두 캐릭터</h2>
+        </div>
+        <div class="chars">
+          <article class="char-card blue" data-char="blue">
+            <div class="char-view"><img referrerpolicy="no-referrer" alt="파랑 캐릭터" src="https://i.postimg.cc/zftdYrk6/1-Stand-blue.gif"></div>
+            <div class="char-info">
+              <span class="label">Character 01</span>
+              <h3>파랑</h3>
+              <div class="states" role="group" aria-label="파랑 동작 선택">
+                <button class="state" type="button" data-state="idle" aria-pressed="true">정지</button>
+                <button class="state" type="button" data-state="left" aria-pressed="false">왼쪽</button>
+                <button class="state" type="button" data-state="right" aria-pressed="false">오른쪽</button>
+                <button class="state" type="button" data-state="jump" aria-pressed="false">점프</button>
+                <button class="state" type="button" data-state="ljump" aria-pressed="false">왼쪽 점프</button>
+                <button class="state" type="button" data-state="rjump" aria-pressed="false">오른쪽 점프</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="char-card red" data-char="red">
+            <div class="char-view"><img referrerpolicy="no-referrer" alt="빨강 캐릭터" src="https://i.postimg.cc/d1h5qxWS/7-Stand-Red.gif"></div>
+            <div class="char-info">
+              <span class="label">Character 02</span>
+              <h3>빨강</h3>
+              <div class="states" role="group" aria-label="빨강 동작 선택">
+                <button class="state" type="button" data-state="idle" aria-pressed="true">정지</button>
+                <button class="state" type="button" data-state="left" aria-pressed="false">왼쪽</button>
+                <button class="state" type="button" data-state="right" aria-pressed="false">오른쪽</button>
+                <button class="state" type="button" data-state="jump" aria-pressed="false">점프</button>
+                <button class="state" type="button" data-state="ljump" aria-pressed="false">왼쪽 점프</button>
+                <button class="state" type="button" data-state="rjump" aria-pressed="false">오른쪽 점프</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="wrap about-grid">
+      <div>
+        <span class="crop about-logo" style="--iw:2113;--bx:196;--by:181;--bw:1720;--bh:341"><img referrerpolicy="no-referrer" src="https://i.postimg.cc/9QVVrdjH/nexaz-dark-transparent.png" alt="NEXAZ"></span>
+        <span class="eyebrow">About NEXAZ</span>
+        <h2 style="margin-top:14px">NEXAZ Studio</h2>
+        <p>NEXAZ는 직접 기획하고 직접 만드는 게임 스튜디오입니다. FLIP은 그 스튜디오가 만든 게임입니다.</p>
+      </div>
+      <div class="person">
+        <img referrerpolicy="no-referrer" src="https://i.postimg.cc/dVBFdhqc/IMG-4168-transparent.png" alt="장윤찬">
+        <div>
+          <span class="label">NEXAZ</span>
+          <h3>장윤찬</h3>
+          <p>NEXAZ 스튜디오</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="crop" style="--iw:1200;--bx:146;--by:204;--bw:908;--bh:182"><img referrerpolicy="no-referrer" src="https://i.postimg.cc/BnssXTfR/nexaz-transparent.png" alt="NEXAZ"></span>
+    <small>© 2026 NEXAZ. All rights reserved.</small>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var B = "https://i.postimg.cc/";
+  var SRC = {
+    blue: {
+      idle: B + "zftdYrk6/1-Stand-blue.gif", right: B + "ydDLVbfP/2-Right-Blue.gif", left: B + "XvH26bgh/3-Left-Blue.gif",
+      jump: B + "xdxsV2PB/4-Jump-Blue.gif", rjump: B + "TwKtR4k7/5-R-Jump-Blue.gif", ljump: B + "cHvFsbDD/6-L-Jump-Blue.gif"
+    },
+    red: {
+      idle: B + "d1h5qxWS/7-Stand-Red.gif", right: B + "G24Xc5Mg/8-Right-Red.gif", left: B + "PxCStR69/9-Left-Red.gif",
+      jump: B + "1t8v9jWT/10-Jump-Red.gif", rjump: B + "638M9mHP/11-R-Jump-Red.gif", ljump: B + "Y9vdpsXs/12-L-Jump-Red.gif"
+    }
+  };
+
+  // Preload every animation (and keep the references so the browser holds on to them).
+  var PRE = {};
+  Object.keys(SRC).forEach(function (c) {
+    PRE[c] = {};
+    Object.keys(SRC[c]).forEach(function (s) {
+      var im = new Image(); im.referrerPolicy = "no-referrer"; im.src = SRC[c][s]; PRE[c][s] = im;
+    });
+  });
+
+  // Switch an <img> to another state. Size and src change in the same step, and only after
+  // the new GIF has loaded, so the old picture is never shown stretched to the wrong size.
+  function show(el, name, state) {
+    el._want = state;
+    var im = PRE[name][state], ref = PRE[name].idle;
+    function go() {
+      if (el._want !== state || !(im.complete && ref.complete)) return;
+      var ok = im.naturalWidth && ref.naturalWidth;
+      el.style.setProperty("--sw", ok ? im.naturalWidth / ref.naturalWidth : 1);
+      el.src = SRC[name][state];
+    }
+    if (im.complete && ref.complete) { go(); return; }
+    [im, ref].forEach(function (i) { i.addEventListener("load", go); i.addEventListener("error", go); });
+  }
+
+  /* ---- Hero stage: walk + jump ---- */
+  var stage = document.getElementById("stage");
+  function mk(id, x) { return { el: document.getElementById(id), x: x, y: 0, py: 0, vy: 0, ride: false, held: { left: false, right: false, jump: false }, state: "idle" }; }
+  var chars = { blue: mk("heroBlue", 32), red: mk("heroRed", 68) };
+  var SPEED = 26;   // percent of stage width per second
+  var HIT = 0.74;   // hit-box width as a fraction of the character image width (raise = wider body)
+  var HIT_H = 0.75; // hit-box height as a fraction of the character image height (raise = taller body)
+  var GRAVITY = 1900, JUMP_V = 650; // px/s^2, px/s
+  var PUSH = 0.6;   // pushing speed as a fraction of walking speed (1 = no resistance)
+  var last = performance.now();
+
+  // Vertical step for one character. "o" is the other one. A character can land on the other's head and ride it.
+  function stepY(c, o, dt, H, gap) {
+    var top = o.y + H, ov = Math.abs(c.x - o.x) < gap;
+    if (c.ride && !ov) c.ride = false;                       // walked off the other's head
+    if (c.ride) { c.y = top; c.vy = 0; }                     // carried along while standing on it
+    if (c.held.jump && (c.ride || c.y <= 0)) { c.vy = JUMP_V; c.ride = false; }
+    if (!c.ride && (c.vy || c.y > 0)) { c.vy -= GRAVITY * dt; c.y += c.vy * dt; }
+    if (!c.ride && ov && c.vy <= 0 && c.py >= o.py + H - 1 && c.y <= top) { c.y = top; c.vy = 0; c.ride = true; } // landed on its head
+    if (!c.ride && c.y <= 0) { c.y = 0; c.vy = 0; }
+  }
+
+  function tick(now) {
+    var dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    var base = Math.min(112, Math.max(72, window.innerWidth * 0.11)); // character image size in px (same clamp as the CSS)
+    var gap = base * HIT / stage.clientWidth * 100;                   // min distance between centres, in % of stage width
+    var H = base * HIT_H;                                             // body height in px
+    var names = Object.keys(chars);
+    names.forEach(function (n) { chars[n].py = chars[n].y; });
+    // lower character first, so one standing on another is carried by its latest height
+    names.slice().sort(function (a, b) { return chars[a].y - chars[b].y; }).forEach(function (n) {
+      stepY(chars[n], chars[n === "blue" ? "red" : "blue"], dt, H, gap);
+    });
+    names.forEach(function (name) {
+      var c = chars[name], o = chars[name === "blue" ? "red" : "blue"];
+      var dir = (c.held.right ? 1 : 0) - (c.held.left ? 1 : 0);
+      var nx = Math.max(8, Math.min(92, c.x + dir * SPEED * dt));
+      if (c.y < o.y + H - 1 && o.y < c.y + H - 1) {   // same height -> the bodies shove each other
+        if (c.x < o.x || (c.x === o.x && name === "blue")) {
+          o.x = Math.min(92, Math.max(o.x, nx + gap));   // push the other one to the right...
+          nx = Math.min(nx, o.x - gap);                  // ...unless it is already against the edge
+        } else {
+          o.x = Math.max(8, Math.min(o.x, nx - gap));    // push the other one to the left
+          nx = Math.max(nx, o.x + gap);
+        }
+      }
+      c.x = nx;
+      c.el.style.transform = "translate(-50%," + (-c.y) + "px)";
+      var air = c.y > 0 && !c.ride;
+      var state = air ? (dir < 0 ? "ljump" : dir > 0 ? "rjump" : "jump")
+                      : (dir < 0 ? "left" : dir > 0 ? "right" : "idle");
+      if (state !== c.state) { c.state = state; show(c.el, name, state); }
+    });
+    names.forEach(function (n) { chars[n].el.style.left = chars[n].x + "%"; });  // also moves the one that got pushed
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  var KEYS = {
+    KeyA: ["blue", "left"], KeyD: ["blue", "right"], KeyW: ["blue", "jump"],
+    ArrowLeft: ["red", "left"], ArrowRight: ["red", "right"], ArrowUp: ["red", "jump"]
+  };
+  function setKeyUI(name, dir, on) {
+    var b = document.querySelector('.key[data-char="' + name + '"][data-dir="' + dir + '"]');
+    if (b) b.classList.toggle("on", on);
+  }
+  function stageVisible() { var r = stage.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
+  window.addEventListener("keydown", function (e) {
+    var m = KEYS[e.code];
+    if (!m) return;
+    if (e.code === "ArrowUp" && stageVisible()) e.preventDefault();
+    chars[m[0]].held[m[1]] = true;
+    setKeyUI(m[0], m[1], true);
+  });
+  window.addEventListener("keyup", function (e) {
+    var m = KEYS[e.code];
+    if (!m) return;
+    chars[m[0]].held[m[1]] = false;
+    setKeyUI(m[0], m[1], false);
+  });
+  window.addEventListener("blur", function () {
+    Object.keys(chars).forEach(function (n) {
+      ["left", "right", "jump"].forEach(function (d) { chars[n].held[d] = false; setKeyUI(n, d, false); });
+    });
+  });
+
+  document.querySelectorAll(".key").forEach(function (btn) {
+    var name = btn.dataset.char, dir = btn.dataset.dir;
+    function press(e) { e.preventDefault(); chars[name].held[dir] = true; btn.classList.add("on"); }
+    function release() { chars[name].held[dir] = false; btn.classList.remove("on"); }
+    btn.addEventListener("pointerdown", press);
+    btn.addEventListener("pointerup", release);
+    btn.addEventListener("pointerleave", release);
+    btn.addEventListener("pointercancel", release);
+    btn.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  });
+
+  /* ---- Character cards: switch animation ---- */
+  document.querySelectorAll(".char-card").forEach(function (card) {
+    var name = card.dataset.char;
+    var img = card.querySelector(".char-view img");
+    var buttons = card.querySelectorAll(".state");
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        show(img, name, b.dataset.state);
+        buttons.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+      });
+    });
+  });
+})();
+</script>
+<script>
+(function () {
+  var T = {
+    "캐릭터": ["Characters", "キャラクター"],
+    "스튜디오": ["Studio", "スタジオ"],
+    "재미를 한 번,": ["Let's", "楽しさを一度、"],
+    "뒤집어": ["flip", "ひっくり返して"],
+    "봅니다.": ["the fun.", "みよう。"],
+    "NEXAZ는 게임 스튜디오입니다. 우리의 게임 FLIP에 등장하는 캐릭터를 지금 바로 움직여 보세요.": ["NEXAZ is a game studio. Move the characters from our game FLIP right now.", "NEXAZはゲームスタジオです。私たちのゲーム「FLIP」のキャラクターを、今すぐ動かしてみてください。"],
+    "NEXAZ는 게임 스튜디오입니다. 우리의 게임 FLIP의 캐릭터를 만나보세요.": ["NEXAZ is a game studio. Meet the characters of our game FLIP.", "NEXAZはゲームスタジオです。私たちのゲーム「FLIP」のキャラクターに会いに来てください。"],
+    "FLIP 만나보기": ["Meet FLIP", "FLIPを見る"],
+    "스튜디오 소개": ["About the studio", "スタジオ紹介"],
+    "파랑": ["Blue", "青"],
+    "빨강": ["Red", "赤"],
+    "파랑 캐릭터": ["Blue character", "青のキャラクター"],
+    "빨강 캐릭터": ["Red character", "赤のキャラクター"],
+    "FLIP 로고": ["FLIP logo", "FLIPロゴ"],
+    "파랑은 A / W / D 키, 빨강은 방향키(← ↑ →)로 움직이고 점프해 보세요. 화면 버튼으로도 조작할 수 있고, 서로 밀거나 점프로 넘어가거나 머리 위에 올라설 수도 있어요.": ["Blue uses the A / W / D keys and Red uses the arrow keys (← ↑ →) to move and jump. On-screen buttons work too, and you can push each other, jump over each other, or stand on each other's heads.", "青はA / W / Dキー、赤は矢印キー(← ↑ →)で動いてジャンプできます。画面のボタンでも操作でき、押し合ったり、飛び越えたり、頭の上に乗ったりもできます。"],
+    "파랑과 빨강, 두 캐릭터가 함께하는 NEXAZ의 게임입니다.": ["A game by NEXAZ starring two characters, Blue and Red.", "青と赤、2人のキャラクターが活躍するNEXAZのゲームです。"],
+    "아래에서 각 캐릭터가 서 있을 때, 좌우로 움직일 때, 점프할 때의 모습을 확인할 수 있습니다.": ["Below, see each character standing, moving left and right, and jumping.", "下で、各キャラクターが立っているとき、左右に動くとき、ジャンプするときの様子を確認できます。"],
+    "FLIP의 두 캐릭터": ["The two characters of FLIP", "FLIPの2人のキャラクター"],
+    "정지": ["Idle", "停止"], "왼쪽": ["Left", "左"], "오른쪽": ["Right", "右"],
+    "점프": ["Jump", "ジャンプ"], "왼쪽 점프": ["Left jump", "左ジャンプ"], "오른쪽 점프": ["Right jump", "右ジャンプ"],
+    "NEXAZ는 직접 기획하고 직접 만드는 게임 스튜디오입니다. FLIP은 그 스튜디오가 만든 게임입니다.": ["NEXAZ is a game studio that plans and builds its own games. FLIP is the game it made.", "NEXAZは、企画から制作まで自分たちで行うゲームスタジオです。FLIPはそのスタジオが作ったゲームです。"],
+    "장윤찬": ["Yoonchan Jang", "たかはし けんと"],
+    "NEXAZ 스튜디오": ["NEXAZ Studio", "NEXAZスタジオ"]
+  };
+  var IDX = { en: 0, ja: 1 }, nodes = [], attrs = [], n;
+  var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while ((n = w.nextNode())) {
+    if (n.parentNode.closest("script,style")) continue;
+    var m = n.nodeValue.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if (m[2] && T.hasOwnProperty(m[2])) nodes.push({ n: n, a: m[1], k: m[2], z: m[3] });
+  }
+  document.querySelectorAll("[alt],[aria-label],meta[name=description]").forEach(function (el) {
+    ["alt", "aria-label", "content"].forEach(function (at) {
+      var v = el.getAttribute(at);
+      if (v && T.hasOwnProperty(v)) attrs.push({ el: el, at: at, k: v });
+    });
+  });
+  var buttons = document.querySelectorAll(".langbar button");
+  function setLang(lang) {
+    var i = IDX[lang];
+    nodes.forEach(function (o) { o.n.nodeValue = o.a + (i === undefined ? o.k : T[o.k][i]) + o.z; });
+    attrs.forEach(function (o) { o.el.setAttribute(o.at, i === undefined ? o.k : T[o.k][i]); });
+    document.documentElement.lang = lang;
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
+    try { localStorage.setItem("nexaz-lang", lang); } catch (e) {}
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.lang); }); });
+  var saved = null;
+  try { saved = localStorage.getItem("nexaz-lang"); } catch (e) {}
+  var nav = (navigator.language || "ko").slice(0, 2);
+  var start = saved || (nav === "ja" ? "ja" : nav === "ko" ? "ko" : "en");
+  if (start !== "ko") setLang(start);
+})();
+</script>
+</body>
+</html>
